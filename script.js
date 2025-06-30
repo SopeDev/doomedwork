@@ -26,7 +26,7 @@ $(document).ready(function () {
     showSlide(currentSlide)
   })
 
-  $('#reset').on('click', function (e) {
+  $('#logo').on('click', function (e) {
     e.preventDefault()
     currentSlide = 1
     showSlide(currentSlide)
