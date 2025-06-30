@@ -5,8 +5,8 @@ $(document).ready(function () {
   // Add all slide images
   for (let i = 1; i <= totalSlides; i++) {
     const $img = $('<img>')
-      .attr('src', `/slides/slide${i}_small.jpg`)
-      .attr('data-hires', `/slides/slide${i}_large.jpg`)
+      .attr('src', `./public/slides/compressed/slide${i}.jpg`)
+      .attr('data-hires', `./public/slides/slide${i}.jpg`)
       .addClass('slide')
       .attr('id', `slide${i}`)
 
