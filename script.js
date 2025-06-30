@@ -1,4 +1,6 @@
 const totalSlides = 41
+const logoBlack = [2, 6 ]
+const logoRed = [1, 3, 4, 5]
 let currentSlide = 1
 
 $(document).ready(function () {
@@ -38,6 +40,7 @@ function showSlide(n) {
   $(`#slide${n}`).addClass('active')
   swapToHighRes(n)
   preloadAdjacent(n)
+  switchLogo(n)
 }
 
 function swapToHighRes(n) {
@@ -57,5 +60,15 @@ function preloadAdjacent(n) {
       const preloader = new Image()
       preloader.src = hiresSrc
     }
+  }
+}
+
+function switchLogo(n) {
+  const $logoImg = $('#logo img')
+
+  if (logoBlack.includes(n)) {
+    $logoImg.attr('src', './public/logo-black.png')
+  } else if (logoRed.includes(n)) {
+    $logoImg.attr('src', './public/logo-red.png')
   }
 }

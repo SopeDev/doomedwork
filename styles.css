@@ -10,16 +10,39 @@ html, body {
 
 #nav {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  display: flex;
+  align-items: center;
+  top: 5vh;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: fit-content;
   z-index: 10;
 }
 
-#nav a {
+#nav #logo {
+  margin-right: 4em;
+}
+
+#nav img {
+  width: 15em;
+}
+
+#nav #shop {
   color: white;
-  margin-right: 20px;
-  font-size: 18px;
+  font-size: 1.2em;
   text-decoration: none;
+  text-transform: uppercase;
+}
+
+#nav #shop:hover {
+  text-decoration: underline;
+}
+
+#nav #shop span {
+  display: block;
+  font-size: .5em;
+  font-style: italic;
 }
 
 .click-zone {
