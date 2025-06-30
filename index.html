@@ -1,13 +1,107 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <title>Slideshow</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: black;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      opacity: 0;
+      z-index: 0;
+    }
+
+    .slide.active {
+      opacity: 1;
+      z-index: 1;
+    }
+
+    #nav {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 10;
+    }
+
+    #nav a {
+      color: white;
+      margin-right: 20px;
+      font-size: 18px;
+      text-decoration: none;
+    }
+
+    .click-zone {
+      position: absolute;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      z-index: 5;
+    }
+
+    .left { left: 0; }
+    .right { right: 0; }
+  </style>
+</head>
+<body>
+
+  <div id="nav">
+    <a href="#" id="reset">Reset</a>
+    <a href="https://shop.doomedwork.com" target="_blank">Shop</a>
+  </div>
+
+  <div class="click-zone left"></div>
+  <div class="click-zone right"></div>
+
+  <!-- Slides will be inserted here by JS -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    const totalSlides = 41
+    let currentSlide = 1
+
+    // Preload and add all images to body
+    for (let i = 1; i <= totalSlides; i++) {
+      const img = new Image()
+      img.src = `/slides/slide${i}.jpg`
+      $(img).addClass('slide').attr('id', `slide${i}`)
+      if (i === 1) $(img).addClass('active')
+      $('body').append(img)
+    }
+
+    function showSlide(n) {
+      $('.slide').removeClass('active')
+      $(`#slide${n}`).addClass('active')
+    }
+
+    function nextSlide() {
+      currentSlide = currentSlide < totalSlides ? currentSlide + 1 : 1
+      showSlide(currentSlide)
+    }
+
+    function prevSlide() {
+      currentSlide = currentSlide > 1 ? currentSlide - 1 : totalSlides
+      showSlide(currentSlide)
+    }
+
+    $('.left').on('click', prevSlide)
+    $('.right').on('click', nextSlide)
+    $('#reset').on('click', function(e) {
+      e.preventDefault()
+      currentSlide = 1
+      showSlide(currentSlide)
+    })
+  </script>
+</body>
 </html>
