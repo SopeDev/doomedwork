@@ -1,6 +1,6 @@
 const totalSlides = 41
-const logoBlack = [2, 6, 14]
-const logoWhite = [3, 4, 5]
+const logoBlack = [2, 6, 9, 14, 30, 32]
+const logoWhite = [3, 4, 5, 20, 21, 28, 31, 33, 39]
 let currentSlide = 1
 
 $(document).ready(function () {
