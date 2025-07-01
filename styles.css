@@ -1,3 +1,29 @@
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+@font-face {
+  font-family: "NeueCorp";
+  src: url("./public/PPNeueCorp-NormalMedium.woff") format("woff");
+}
+
+html {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body {
+  overflow: hidden;
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -6,6 +32,7 @@ html, body {
   overflow: hidden;
   font-family: sans-serif;
   cursor: url('./public/cursor.png') 1 38, auto;
+  font-family: 'NeueCorp', sans-serif;
 }
 
 #nav {
@@ -25,12 +52,23 @@ html, body {
 }
 
 #nav img {
+  display: block;
   width: 15em;
 }
 
+#nav img.black {
+  filter: brightness(0);
+}
+
+#nav img.white {
+  filter: brightness(100);
+}
+
 #nav #shop {
+  display: block;
   color: white;
   font-size: 1.2em;
+  line-height: 1em;
   text-decoration: none;
   text-transform: uppercase;
 }
@@ -43,6 +81,7 @@ html, body {
   display: block;
   font-size: .5em;
   font-style: italic;
+  line-height: 1.2em;
 }
 
 .click-zone {

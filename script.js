@@ -1,6 +1,6 @@
 const totalSlides = 41
-const logoBlack = [2, 6 ]
-const logoRed = [1, 3, 4, 5]
+const logoBlack = [2, 6, 14]
+const logoWhite = [3, 4, 5]
 let currentSlide = 1
 
 $(document).ready(function () {
@@ -67,8 +67,13 @@ function switchLogo(n) {
   const $logoImg = $('#logo img')
 
   if (logoBlack.includes(n)) {
-    $logoImg.attr('src', './public/logo-black.png')
-  } else if (logoRed.includes(n)) {
-    $logoImg.attr('src', './public/logo-red.png')
+    $logoImg.addClass('black')
+    $logoImg.removeClass('white')
+  } else if (logoWhite.includes(n)) {
+    $logoImg.addClass('white')
+    $logoImg.removeClass('black')
+  } else {
+    $logoImg.removeClass('black')
+    $logoImg.removeClass('white')
   }
 }
