@@ -1,6 +1,6 @@
 const totalSlides = 41
 const logoBlack = [2, 6, 9, 14, 30, 32]
-const logoWhite = [3, 4, 5, 20, 21, 28, 31, 33, 39]
+const logoWhite = [3, 4, 5, 12, 20, 21, 28, 31, 33, 39]
 let currentSlide = 1
 
 $(document).ready(function () {
@@ -65,15 +65,16 @@ function preloadAdjacent(n) {
 
 function switchLogo(n) {
   const $logoImg = $('#logo img')
+  const $shopText = $('#shop')
 
   if (logoBlack.includes(n)) {
-    $logoImg.addClass('black')
-    $logoImg.removeClass('white')
+    $logoImg.css("filter", "brightness(0)");
+    $shopText.css("color", "#000000");
   } else if (logoWhite.includes(n)) {
-    $logoImg.addClass('white')
-    $logoImg.removeClass('black')
+    $logoImg.css("filter", "brightness(100)");
+    $shopText.css("color", "#FFFFFF");
   } else {
-    $logoImg.removeClass('black')
-    $logoImg.removeClass('white')
+    $logoImg.css("filter", "brightness(1)");
+    $shopText.css("color", "#FF0647");
   }
 }
