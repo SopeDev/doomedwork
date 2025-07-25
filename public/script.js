@@ -11,10 +11,10 @@ $(document).ready(function () {
     (currentSlide % totalSlides) + 1 // next
   ]
   slidesToLoad.forEach(i => {
-    const compressedJpg = `./slides/compressed/slide${i}.jpg`
-    const compressedWebp = `./slides/compressed/webp_output/slide${i}.webp`
-    const hiresJpg = `./slides/slide${i}.jpg`
-    const hiresWebp = `./slides/webp_output/slide${i}.webp`
+    const compressedJpg = `./slides/compressed/slide${i}_1920.jpg`
+    const compressedWebp = `./slides/compressed/webp_output/slide${i}_1920.webp`
+    const hiresJpg = `./slides/slide${i}_1920.jpg`
+    const hiresWebp = `./slides/webp_output/slide${i}_1920.webp`
 
     // Create <picture> element
     const $picture = $('<picture>')
