@@ -6,14 +6,42 @@ let currentSlide = 1
 $(document).ready(function () {
   // Add all slide images
   for (let i = 1; i <= totalSlides; i++) {
+    const compressedJpg = `./public/slides/compressed/slide${i}.jpg`;
+    const compressedWebp = `./public/slides/compressed/slide${i}.webp`;
+    const hiresJpg = `./public/slides/slide${i}.jpg`;
+    const hiresWebp = `./public/slides/slide${i}.webp`;
+  
+    // Create <picture> element
+    const $picture = $('<picture>')
+      // WebP source (compressed)
+      .append(
+        $('<source>')
+          .attr('srcset', compressedWebp)
+          .attr('type', 'image/webp')
+          .attr('data-hires', hiresWebp)
+      )
+      // JPEG source (compressed)
+      .append(
+        $('<source>')
+          .attr('srcset', compressedJpg)
+          .attr('type', 'image/jpeg')
+          .attr('data-hires', hiresJpg)
+      );
+  
+    // Fallback <img> (compressed JPEG)
     const $img = $('<img>')
-      .attr('src', `./public/slides/compressed/slide${i}.jpg`)
-      .attr('data-hires', `./public/slides/slide${i}.jpg`)
+      .attr('src', compressedJpg)
+      .attr('data-hires-jpg', hiresJpg)
+      .attr('data-hires-webp', hiresWebp)
       .addClass('slide')
       .attr('id', `slide${i}`)
-
-    if (i === 1) $img.addClass('active')
-    $('#slideshow').append($img)
+      .attr('alt', `Slide ${i}`)
+      .attr('loading', 'lazy')
+      .attr('sizes', '(max-width: 800px) 100vw, 800px'); // Responsive sizes
+  
+    if (i === 1) $img.addClass('active');
+    $picture.append($img);
+    $('#slideshow').append($picture);
   }
 
   preloadAdjacent(currentSlide)
@@ -44,21 +72,39 @@ function showSlide(n) {
 }
 
 function swapToHighRes(n) {
-  const $img = $(`#slide${n}`)
-  if (!$img.hasClass('hires')) {
-    $img.attr('src', $img.data('hires'))
-    $img.addClass('hires')
-  }
+  const $picture = $(`#slide${n}`).closest('picture');
+  const $img = $picture.find('img');
+  const hiresJpg = $img.attr('data-hires-jpg');
+  const hiresWebp = $img.attr('data-hires-webp');
+
+  // Update <source> elements
+  $picture.find('source[type="image/webp"]').attr('srcset', hiresWebp);
+  $picture.find('source[type="image/jpeg"]').attr('srcset', hiresJpg);
+
+  // Update <img> fallback
+  $img.attr('src', hiresJpg);
+
+  // Optionally, add a class to indicate high-res is loaded
+  $img.addClass('hires');
 }
 
 function preloadAdjacent(n) {
   for (let offset = -2; offset <= 2; offset++) {
-    let i = ((n - 1 + offset + totalSlides) % totalSlides) + 1
-    const $img = $(`#slide${i}`)
+    let i = ((n - 1 + offset + totalSlides) % totalSlides) + 1;
+    const $img = $(`#slide${i}`);
     if ($img.length && !$img.hasClass('hires')) {
-      const hiresSrc = $img.data('hires')
-      const preloader = new Image()
-      preloader.src = hiresSrc
+      const hiresJpg = $img.attr('data-hires-jpg');
+      const hiresWebp = $img.attr('data-hires-webp');
+      // Preload hires WebP
+      if (hiresWebp) {
+        const preloaderWebp = new Image();
+        preloaderWebp.src = hiresWebp;
+      }
+      // Preload hires JPEG
+      if (hiresJpg) {
+        const preloaderJpg = new Image();
+        preloaderJpg.src = hiresJpg;
+      }
     }
   }
 }
