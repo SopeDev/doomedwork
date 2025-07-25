@@ -106,16 +106,16 @@ function ensureSlideInDOM(i) {
 }
 
 function showSlide(n) {
-  // Ensure current, previous, and next slides are in the DOM
-  const prev = ((n - 2 + totalSlides) % totalSlides) + 1
-  const next = (n % totalSlides) + 1
-  [prev, n, next].forEach(ensureSlideInDOM)
+  // Calculate prev and next first
+  const prev = ((n - 2 + totalSlides) % totalSlides) + 1;
+  const next = (n % totalSlides) + 1;
+  [prev, n, next].forEach(ensureSlideInDOM);
 
-  $('.slide').removeClass('active')
-  $(`#slide${n}`).addClass('active')
-  swapToHighRes(n)
-  preloadAdjacent(n)
-  switchLogo(n)
+  $('.slide').removeClass('active');
+  $(`#slide${n}`).addClass('active');
+  swapToHighRes(n);
+  preloadAdjacent(n);
+  switchLogo(n);
 }
 
 function swapToHighRes(n) {
