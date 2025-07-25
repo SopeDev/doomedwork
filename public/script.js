@@ -4,13 +4,18 @@ const logoWhite = [3, 4, 5, 12, 20, 21, 28, 31, 33, 39]
 let currentSlide = 1
 
 $(document).ready(function () {
-  // Add all slide images
-  for (let i = 1; i <= totalSlides; i++) {
+  // Only add current, previous, and next slide images
+  const slidesToLoad = [
+    ((currentSlide - 2 + totalSlides) % totalSlides) + 1, // previous
+    currentSlide, // current
+    (currentSlide % totalSlides) + 1 // next
+  ];
+  slidesToLoad.forEach(i => {
     const compressedJpg = `./slides/compressed/slide${i}.jpg`;
     const compressedWebp = `./slides/compressed/webp_output/slide${i}.webp`;
     const hiresJpg = `./slides/slide${i}.jpg`;
     const hiresWebp = `./slides/webp_output/slide${i}.webp`;
-  
+
     // Create <picture> element
     const $picture = $('<picture>')
       // WebP source (compressed)
@@ -27,7 +32,7 @@ $(document).ready(function () {
           .attr('type', 'image/jpeg')
           .attr('data-hires', hiresJpg)
       );
-  
+
     // Fallback <img> (compressed JPEG)
     const $img = $('<img>')
       .attr('src', compressedJpg)
@@ -38,11 +43,11 @@ $(document).ready(function () {
       .attr('alt', `Slide ${i}`)
       .attr('loading', 'lazy')
       .attr('sizes', '(max-width: 800px) 100vw, 800px'); // Responsive sizes
-  
-    if (i === 1) $img.addClass('active');
+
+    if (i === currentSlide) $img.addClass('active');
     $picture.append($img);
     $('#slideshow').append($picture);
-  }
+  });
 
   preloadAdjacent(currentSlide)
 
@@ -63,7 +68,48 @@ $(document).ready(function () {
   })
 })
 
+function ensureSlideInDOM(i) {
+  // Only add if the slide's <img> does not already exist in the DOM
+  if ($(`#slide${i}`).length > 0) return;
+  const compressedJpg = `./slides/compressed/slide${i}.jpg`;
+  const compressedWebp = `./slides/compressed/webp_output/slide${i}.webp`;
+  const hiresJpg = `./slides/slide${i}.jpg`;
+  const hiresWebp = `./slides/webp_output/slide${i}.webp`;
+
+  const $picture = $('<picture>')
+    .append(
+      $('<source>')
+        .attr('srcset', compressedWebp)
+        .attr('type', 'image/webp')
+        .attr('data-hires', hiresWebp)
+    )
+    .append(
+      $('<source>')
+        .attr('srcset', compressedJpg)
+        .attr('type', 'image/jpeg')
+        .attr('data-hires', hiresJpg)
+    );
+
+  const $img = $('<img>')
+    .attr('src', compressedJpg)
+    .attr('data-hires-jpg', hiresJpg)
+    .attr('data-hires-webp', hiresWebp)
+    .addClass('slide')
+    .attr('id', `slide${i}`)
+    .attr('alt', `Slide ${i}`)
+    .attr('loading', 'lazy')
+    .attr('sizes', '(max-width: 800px) 100vw, 800px');
+
+  $picture.append($img);
+  $('#slideshow').append($picture);
+}
+
 function showSlide(n) {
+  // Ensure current, previous, and next slides are in the DOM
+  const prev = ((n - 2 + totalSlides) % totalSlides) + 1;
+  const next = (n % totalSlides) + 1;
+  [prev, n, next].forEach(ensureSlideInDOM);
+
   $('.slide').removeClass('active')
   $(`#slide${n}`).addClass('active')
   swapToHighRes(n)
