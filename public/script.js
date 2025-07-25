@@ -4,29 +4,55 @@ const logoWhite = [3, 4, 5, 12, 20, 21, 28, 31, 33, 39]
 let currentSlide = 1
 
 function createSlidePicture(i) {
-  const compressedJpg = `./slides/compressed/slide${i}_1920.jpg`;
-  const compressedWebp = `./slides/compressed/webp_output/slide${i}_1920.webp`;
-  const hiresJpg = `./slides/slide${i}_1920.jpg`;
-  const hiresWebp = `./slides/webp_output/slide${i}_1920.webp`;
+  // Paths for each resolution and format
+  const jpg1920 = `./slides/slide${i}_1920.jpg`;
+  const jpg2560 = `./slides/slide${i}_2560.jpg`;
+  const jpg3840 = `./slides/slide${i}_3840.jpg`;
+  const webp1920 = `./slides/webp_output/slide${i}_1920.webp`;
+  const webp2560 = `./slides/webp_output/slide${i}_2560.webp`;
+  const webp3840 = `./slides/webp_output/slide${i}_3840.webp`;
 
   const $picture = $('<picture>')
+    // WebP sources
     .append(
       $('<source>')
-        .attr('srcset', compressedWebp)
+        .attr('srcset', webp3840)
         .attr('type', 'image/webp')
-        .attr('data-hires', hiresWebp)
+        .attr('media', '(min-width: 3000px)')
     )
     .append(
       $('<source>')
-        .attr('srcset', compressedJpg)
+        .attr('srcset', webp2560)
+        .attr('type', 'image/webp')
+        .attr('media', '(min-width: 2000px)')
+    )
+    .append(
+      $('<source>')
+        .attr('srcset', webp1920)
+        .attr('type', 'image/webp')
+    )
+    // JPEG sources
+    .append(
+      $('<source>')
+        .attr('srcset', jpg3840)
         .attr('type', 'image/jpeg')
-        .attr('data-hires', hiresJpg)
+        .attr('media', '(min-width: 3000px)')
+    )
+    .append(
+      $('<source>')
+        .attr('srcset', jpg2560)
+        .attr('type', 'image/jpeg')
+        .attr('media', '(min-width: 2000px)')
+    )
+    .append(
+      $('<source>')
+        .attr('srcset', jpg1920)
+        .attr('type', 'image/jpeg')
     );
 
+  // Fallback <img> (1920px JPEG)
   const $img = $('<img>')
-    .attr('src', compressedJpg)
-    .attr('data-hires-jpg', hiresJpg)
-    .attr('data-hires-webp', hiresWebp)
+    .attr('src', jpg1920)
     .addClass('slide')
     .attr('id', `slide${i}`)
     .attr('alt', `Slide ${i}`)
