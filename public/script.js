@@ -7,9 +7,9 @@ $(document).ready(function () {
   // Add all slide images
   for (let i = 1; i <= totalSlides; i++) {
     const compressedJpg = `./slides/compressed/slide${i}.jpg`;
-    const compressedWebp = `./slides/compressed/slide${i}.webp`;
+    const compressedWebp = `./slides/compressed/webp_output/slide${i}.webp`;
     const hiresJpg = `./slides/slide${i}.jpg`;
-    const hiresWebp = `./slides/slide${i}.webp`;
+    const hiresWebp = `./slides/webp_output/slide${i}.webp`;
   
     // Create <picture> element
     const $picture = $('<picture>')

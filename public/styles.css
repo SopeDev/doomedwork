@@ -8,7 +8,7 @@
 
 @font-face {
   font-family: "NeueCorp";
-  src: url("./public/PPNeueCorp-NormalMedium.woff") format("woff");
+  src: url("./PPNeueCorp-NormalMedium.woff") format("woff");
 }
 
 html {
@@ -31,7 +31,7 @@ html, body {
   height: 100%;
   overflow: hidden;
   font-family: sans-serif;
-  cursor: url('./public/cursor.png') 1 38, auto;
+  cursor: url('./cursor.png') 1 38, auto;
   font-family: 'NeueCorp', sans-serif;
 }
 
