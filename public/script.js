@@ -3,79 +3,11 @@ const logoBlack = [2, 6, 9, 14, 30, 32]
 const logoWhite = [3, 4, 5, 12, 20, 21, 28, 31, 33, 39]
 let currentSlide = 1
 
-$(document).ready(function () {
-  // Only add current, previous, and next slide images
-  const slidesToLoad = [
-    ((currentSlide - 2 + totalSlides) % totalSlides) + 1, // previous
-    currentSlide, // current
-    (currentSlide % totalSlides) + 1 // next
-  ]
-  slidesToLoad.forEach(i => {
-    const compressedJpg = `./slides/compressed/slide${i}_1920.jpg`
-    const compressedWebp = `./slides/compressed/webp_output/slide${i}_1920.webp`
-    const hiresJpg = `./slides/slide${i}_1920.jpg`
-    const hiresWebp = `./slides/webp_output/slide${i}_1920.webp`
-
-    // Create <picture> element
-    const $picture = $('<picture>')
-      // WebP source (compressed)
-      .append(
-        $('<source>')
-          .attr('srcset', compressedWebp)
-          .attr('type', 'image/webp')
-          .attr('data-hires', hiresWebp)
-      )
-      // JPEG source (compressed)
-      .append(
-        $('<source>')
-          .attr('srcset', compressedJpg)
-          .attr('type', 'image/jpeg')
-          .attr('data-hires', hiresJpg)
-      )
-
-    // Fallback <img> (compressed JPEG)
-    const $img = $('<img>')
-      .attr('src', compressedJpg)
-      .attr('data-hires-jpg', hiresJpg)
-      .attr('data-hires-webp', hiresWebp)
-      .addClass('slide')
-      .attr('id', `slide${i}`)
-      .attr('alt', `Slide ${i}`)
-      .attr('loading', 'lazy')
-      .attr('sizes', '(max-width: 800px) 100vw, 800px') // Responsive sizes
-
-    if (i === currentSlide) $img.addClass('active')
-    $picture.append($img)
-    $('#slideshow').append($picture)
-  })
-
-  preloadAdjacent(currentSlide)
-  swapToHighRes(currentSlide)
-
-  $('.left').on('click', () => {
-    currentSlide = currentSlide > 1 ? currentSlide - 1 : totalSlides
-    showSlide(currentSlide)
-  })
-
-  $('.right').on('click', () => {
-    currentSlide = currentSlide < totalSlides ? currentSlide + 1 : 1
-    showSlide(currentSlide)
-  })
-
-  $('#logo').on('click', function (e) {
-    e.preventDefault()
-    currentSlide = 1
-    showSlide(currentSlide)
-  })
-})
-
-function ensureSlideInDOM(i) {
-  // Only add if the slide's <img> does not already exist in the DOM
-  if ($(`#slide${i}`).length > 0) return
-  const compressedJpg = `./slides/compressed/slide${i}.jpg`
-  const compressedWebp = `./slides/compressed/webp_output/slide${i}.webp`
-  const hiresJpg = `./slides/slide${i}.jpg`
-  const hiresWebp = `./slides/webp_output/slide${i}.webp`
+function createSlidePicture(i) {
+  const compressedJpg = `./slides/compressed/slide${i}_1920.jpg`;
+  const compressedWebp = `./slides/compressed/webp_output/slide${i}_1920.webp`;
+  const hiresJpg = `./slides/slide${i}_1920.jpg`;
+  const hiresWebp = `./slides/webp_output/slide${i}_1920.webp`;
 
   const $picture = $('<picture>')
     .append(
@@ -89,7 +21,7 @@ function ensureSlideInDOM(i) {
         .attr('srcset', compressedJpg)
         .attr('type', 'image/jpeg')
         .attr('data-hires', hiresJpg)
-    )
+    );
 
   const $img = $('<img>')
     .attr('src', compressedJpg)
@@ -99,10 +31,50 @@ function ensureSlideInDOM(i) {
     .attr('id', `slide${i}`)
     .attr('alt', `Slide ${i}`)
     .attr('loading', 'lazy')
-    .attr('sizes', '(max-width: 800px) 100vw, 800px')
+    .attr('sizes', '(max-width: 800px) 100vw, 800px');
 
-  $picture.append($img)
-  $('#slideshow').append($picture)
+  $picture.append($img);
+  return $picture;
+}
+
+$(document).ready(function () {
+  // Only add current, previous, and next slide images
+  const slidesToLoad = [
+    ((currentSlide - 2 + totalSlides) % totalSlides) + 1, // previous
+    currentSlide, // current
+    (currentSlide % totalSlides) + 1 // next
+  ];
+  slidesToLoad.forEach(i => {
+    const $picture = createSlidePicture(i);
+    if (i === currentSlide) $picture.find('img').addClass('active');
+    $('#slideshow').append($picture);
+  });
+
+  preloadAdjacent(currentSlide);
+  swapToHighRes(currentSlide);
+
+  $('.left').on('click', () => {
+    currentSlide = currentSlide > 1 ? currentSlide - 1 : totalSlides;
+    showSlide(currentSlide);
+  });
+
+  $('.right').on('click', () => {
+    currentSlide = currentSlide < totalSlides ? currentSlide + 1 : 1;
+    showSlide(currentSlide);
+  });
+
+  $('#logo').on('click', function (e) {
+    e.preventDefault();
+    currentSlide = 1;
+    showSlide(currentSlide);
+  });
+});
+
+function ensureSlideInDOM(i) {
+  // Only add if the slide's <img> does not already exist in the DOM
+  if ($(`#slide${i}`).length > 0) return;
+  const $picture = createSlidePicture(i);
+  $('#slideshow').append($picture);
 }
 
 function showSlide(n) {
